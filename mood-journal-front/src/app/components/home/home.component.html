@@ -1,0 +1,18 @@
+<div style="text-align:center">
+  <h1>Welcome to the Mood Journal</h1>
+
+  <form (ngSubmit)="onSubmit()">
+    <label for="entry">Enter your journal entry:</label><br>
+    <textarea id="entry" [(ngModel)]="entry" name="entry" rows="4" cols="50"></textarea><br><br>
+
+    <button type="submit" [disabled]="!entry">Analyze Mood</button>
+  </form>
+
+  <div *ngIf="mood">
+    <h2>Your mood is: {{ mood }}</h2>
+  </div>
+
+  <div *ngIf="errorMessage" style="color: red;">
+    <p>{{ errorMessage }}</p>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+label {
+  font-size: 1em;
+}
+
+body {
+  font-family: 'Lora', serif;
+  background-color: aliceblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.submit-button {
+  margin-top: 10px;
+  width: 100%;
+  padding: 12px 25px;
+  background: #71a5c6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8em;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+  align-self: center;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+.reset-password-link {
+  font-size: small;
+  color: grey;
+  align-self: self-end;
+  margin-top: -10px;
+}
+
+.reset-password-link a:hover {
+  color: rgb(114, 146, 220);
+  text-decoration: underline;
+}
+

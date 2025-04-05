@@ -1,0 +1,10 @@
+runtime: nodejs20
+instance_class: F1
+
+handlers:
+  - url: /
+    static_files: dist/frontend/browser/index.csr.html
+    upload: dist/frontend/browser/index.csr.html
+
+  - url: /
+    static_dir: dist/frontend/browser
