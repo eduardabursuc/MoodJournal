@@ -1,10 +1,14 @@
 const functions = require('@google-cloud/functions-framework');
 const language = require('@google-cloud/language');
 const { Firestore } = require('@google-cloud/firestore');
+const { BigQuery } = require('@google-cloud/bigquery');
 const client = new language.LanguageServiceClient();
 const db = new Firestore({
   projectId: 'moodboardproject-455907',
   databaseId: 'journal'
+});
+const bigquery = new BigQuery({
+  projectId: 'moodboardproject-455907',
 });
 
 functions.http('analyzeMood', async (req, res) => {
@@ -40,6 +44,18 @@ functions.http('analyzeMood', async (req, res) => {
     };
     
     await userDocRef.collection('journal_entries').add(entryData);
+    
+    const dataset = bigquery.dataset('text_sentiment_analysis');
+    const table = dataset.table('sentiment_entries');
+    await table.insert([
+      {
+        user_id,
+        entry,
+        mood,
+        timestamp: new Date(),
+      },
+    ]);
+    
     res.json({ message: 'Entry saved!', mood });
   } catch (err) {
     console.error('Error analyzing/storing entry:', err);

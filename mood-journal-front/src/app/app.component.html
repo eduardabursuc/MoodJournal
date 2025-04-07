@@ -1,1 +1,54 @@
-<router-outlet></router-outlet>
+<div class="mood-journal">
+    <header class="header" *ngIf="showHeaderFooter()">
+      <div class="container">
+        <div class="logo">
+          <h2>Mood Journal</h2>
+        </div>
+        <nav class="nav">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/settings">Settings</a></li>
+          </ul>
+        </nav>
+        <div class="user-actions">
+          <a class="btn-secondary" href="/register">Sign In</a>
+          <a class="btn-secondary" href="/login">Log In</a>
+        </div>
+      </div>
+    </header>
+  
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  
+    <footer class="footer" *ngIf="showHeaderFooter()">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <h3>Mood Journal</h3>
+            <p>Your daily companion for emotional wellness</p>
+          </div>
+          <div class="footer-section">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+              <li><a href="#">Terms of Service</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+          <div class="footer-section">
+            <h4>Connect With Us</h4>
+            <div class="social-links">
+              <a href="#" class="social-link">Twitter</a>
+              <a href="#" class="social-link">Instagram</a>
+              <a href="#" class="social-link">Facebook</a>
+            </div>
+          </div>
+        </div>
+        <div class="copyright">
+          <p>&copy; 2025 Mood Journal. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
