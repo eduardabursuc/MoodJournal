@@ -1,0 +1,35 @@
+<div class="analytics-container">
+    <div class="header">
+      <h1>Mood Analytics Dashboard</h1>
+      <p>View insights and trends from your mood journal entries</p>
+    </div>
+    
+    <div class="report-wrapper">
+      <!-- Loading spinner -->
+      <div class="loading-spinner" *ngIf="isLoading">
+        <div class="spinner"></div>
+        <p>Loading your dashboard...</p>
+      </div>
+      
+      <!-- Looker Studio Report -->
+      <div class="report-container" [ngClass]="{'loaded': !isLoading}">
+        <iframe 
+          [src]="lookerReportUrl" 
+          frameborder="0" 
+          allowfullscreen
+          (load)="onIframeLoad()">
+        </iframe>
+      </div>
+    </div>
+    
+    <div class="info-panel">
+      <div class="info-card">
+        <i class="fas fa-info-circle"></i>
+        <p>This dashboard shows your mood patterns over time. Analyze your emotional trends to understand what affects your wellbeing.</p>
+      </div>
+      <!-- <div class="user-info">
+        <p>Dashboard for: <strong>{{ userId }}</strong></p>
+        <p>Last updated: {{ now | date:'medium' }}</p>
+      </div> -->
+    </div>
+  </div>
