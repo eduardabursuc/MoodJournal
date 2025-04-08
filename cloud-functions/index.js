@@ -308,12 +308,12 @@ async function sendEmailsToUsers(users, transporter, fromEmail) {
       
       const emailHtml = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #4CAF50;">Hello,</h2>
+          <h2 style="color: #5b6af0;">Hello,</h2>
           <p>It's time to log your mood for today (${currentDate}).</p>
           <p>Tracking your moods regularly helps you gain insights into your emotional patterns and well-being.</p>
           <p style="margin: 30px 0;">
             <a href="https://moodboardproject-455907.web.app/log" 
-               style="background-color: #4CAF50; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+               style="background-color: #5b6af0; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
               Log Today's Mood
             </a>
           </p>
