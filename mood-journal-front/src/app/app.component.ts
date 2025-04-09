@@ -32,4 +32,19 @@ export class AppComponent {
   getPageClass(): string {
     return this.showHeaderFooter() ? '' : 'auth-page';
   }
+
+  isLoggedIn(): boolean {
+    // Check if user is logged in by checking local storage or a service
+    const userId = localStorage.getItem('userId');
+    return !!userId;
+  }
+
+  logout(): void {
+    // Clear user data from local storage or service
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userEmail');
+    
+    // Redirect to login page
+    this.router.navigate(['/login']);
+  }
 }

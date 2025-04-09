@@ -12,9 +12,11 @@
           </ul>
         </nav>
         <div class="user-actions">
-          <a class="btn-secondary" href="/register">Sign In</a>
-          <a class="btn-secondary" href="/login">Log In</a>
-        </div>
+            <a class="btn-secondary" href="/register" *ngIf="!isLoggedIn()">Sign In</a>
+            <a class="btn-secondary" href="/login" *ngIf="!isLoggedIn()">Log In</a>
+          
+            <button class="btn-secondary" (click)="logout()" *ngIf="isLoggedIn()">Logout</button>
+          </div>
       </div>
     </header>
   
