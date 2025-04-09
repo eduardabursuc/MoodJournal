@@ -1,18 +1,54 @@
-<div style="text-align:center">
-  <h1>Welcome to the Mood Journal</h1>
-
-  <form (ngSubmit)="onSubmit()">
-    <label for="entry">Enter your journal entry:</label><br>
-    <textarea id="entry" [(ngModel)]="entry" name="entry" rows="4" cols="50"></textarea><br><br>
-
-    <button type="submit" [disabled]="!entry">Analyze Mood</button>
-  </form>
-
-  <div *ngIf="mood">
-    <h2>Your mood is: {{ mood }}</h2>
+<div class="container">
+  <div class="journal-card">
+    <h1>Welcome to Your Mood Journal</h1>
+    <p class="subtitle">Track how you feel and discover patterns in your emotional well-being</p>
+    
+    <form (ngSubmit)="onSubmit()" class="journal-form">
+      <div class="form-group">
+        <label for="entry">How are you feeling today?</label>
+        <textarea 
+          id="entry" 
+          [(ngModel)]="entry" 
+          name="entry" 
+          rows="4" 
+          placeholder="Write your thoughts here..."
+        ></textarea>
+      </div>
+      
+      <button type="submit" [disabled]="!entry" class="btn-primary">
+        <span class="btn-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </span>
+        Analyze Mood
+      </button>
+    </form>
+    
+    <div *ngIf="mood" class="mood-result">
+      <h2>Your mood is: <span class="mood-text">{{ mood }}</span></h2>
+    </div>
+    
+    <div *ngIf="errorMessage" class="error-message">
+      <p>{{ errorMessage }}</p>
+    </div>
   </div>
-
-  <div *ngIf="errorMessage" style="color: red;">
-    <p>{{ errorMessage }}</p>
+  
+  <div class="features">
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3>Track Progress</h3>
+      <p>Monitor your emotional well-being over time with visualized data</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔍</div>
+      <h3>Identify Patterns</h3>
+      <p>Discover what affects your mood with AI-powered insights</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>Set Goals</h3>
+      <p>Create emotional wellness goals and track your journey</p>
+    </div>
   </div>
 </div>

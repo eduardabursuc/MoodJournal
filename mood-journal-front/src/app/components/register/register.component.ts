@@ -16,6 +16,7 @@ export class RegisterComponent{
   password: string = '';
   confirmPassword: string = '';
   errorMessage: string = '';
+  isLoading: boolean = false;
 
   constructor(
     private readonly userService: UserService,
@@ -23,24 +24,40 @@ export class RegisterComponent{
   ) {}
 
   onSubmit() {
+    this.isLoading = true;
+    this.errorMessage = '';
 
     if (this.password !== this.confirmPassword) {
       this.errorMessage = 'Passwords do not match.';
+      this.isLoading = false;
       return;
     }
 
     const credentials = { email: this.email, password: this.password };
     this.userService.register(credentials).subscribe({
       next: (response) => {
-        console.log('Success.');
-        this.router.navigate(['/login']);
+        if (response.success) {
+          console.log('Registration successful.');
+          this.router.navigate(['/home']);
+        } else {
+          this.errorMessage = response.error || 'Registration failed. Please try again.';
+          this.isLoading = false;
+        }
       },
-      error : (error) => {
-        if (error.status == 409 || error.status == 500) { 
-          this.errorMessage = error.error.message;
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Registration error:', error);
+        
+        if (error.status === 400) {
+          this.errorMessage = 'User with this email already exists.';
+        } else if (error.status === 409 || error.status === 500) { 
+          this.errorMessage = error.error?.message || 'Registration failed.';
         } else {
           this.errorMessage = 'An error occurred. Please try again later.';
         }
+      },
+      complete: () => {
+        this.isLoading = false;
       }
     });
   }
