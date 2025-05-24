@@ -1,0 +1,129 @@
+<div class="mood-stats-container">
+  <div class="header">
+    <h1>Your Mood Statistics</h1>
+    <p>Track your emotional patterns and insights over time</p>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-spinner" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading your mood statistics...</p>
+  </div>
+
+  <!-- Error Message -->
+  <div class="error-message" *ngIf="error && !isLoading">
+    <i class="fas fa-exclamation-triangle"></i>
+    <p>{{ error }}</p>
+    <button class="retry-btn" (click)="loadMoodStats()">Retry</button>
+  </div>
+
+  <!-- Mood Statistics Content -->
+  <div class="stats-content" *ngIf="moodStats && !isLoading && !error">
+    
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="period-card" *ngFor="let period of periods">
+        <div class="card-header">
+          <h3>{{ getPeriodTitle(period) }}</h3>
+          <span class="total-count">{{ getTotal(period) }} total entries</span>
+        </div>
+        
+        <!-- Progress Bars -->
+        <div class="mood-breakdown">
+          <div class="mood-item" *ngFor="let mood of moods">
+            <div class="mood-info">
+              <span class="mood-label">{{ mood }}</span>
+              <div class="mood-numbers">
+                <span class="count">{{ moodStats![period][mood] }}</span>
+                <span class="percentage">({{ getPercentage(period, mood) }}%)</span>
+              </div>
+            </div>
+            <div class="progress-bar">
+              <div 
+                class="progress-fill"
+                [style.width.%]="getPercentage(period, mood)"
+                [style.background-color]="getMoodColor(mood)">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pie Chart Visualization -->
+        <div class="chart-container" *ngIf="getTotal(period) > 0">
+          <div class="pie-chart">
+            <svg viewBox="0 0 100 100" class="circular-chart">
+                <circle 
+                    cx="50" 
+                    cy="50" 
+                    r="40"
+                    fill="transparent"
+                    stroke="#4caf50"
+                    stroke-width="20"
+                    [attr.stroke-dasharray]="getPercentage(period, 'Positive') + ', 100'"
+                    stroke-dashoffset="25"
+                    transform="rotate(-90 50 50)">
+                </circle>
+                <circle 
+                    cx="50" 
+                    cy="50" 
+                    r="40"
+                    fill="transparent"
+                    stroke="#ff9800"
+                    stroke-width="20"
+                    [attr.stroke-dasharray]="getPercentage(period, 'Neutral') + ', 100'"
+                    [attr.stroke-dashoffset]="25 - getPercentage(period, 'Positive')"
+                    transform="rotate(-90 50 50)">
+                </circle>
+                <circle 
+                    cx="50" 
+                    cy="50" 
+                    r="40"
+                    fill="transparent"
+                    stroke="#f44336"
+                    stroke-width="20"
+                    [attr.stroke-dasharray]="getPercentage(period, 'Negative') + ', 100'"
+                    [attr.stroke-dashoffset]="25 - getPercentage(period, 'Positive') - getPercentage(period, 'Neutral')"
+                    transform="rotate(-90 50 50)">
+                </circle>
+            </svg>
+            <div class="chart-center">
+              <span class="total-number">{{ getTotal(period) }}</span>
+              <span class="total-label">entries</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- No Data Message -->
+        <div class="no-data" *ngIf="getTotal(period) === 0">
+          <i class="fas fa-chart-bar"></i>
+          <p>No mood entries recorded for this period</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Insights -->
+    <div class="insights-panel">
+      <div class="insight-card">
+        <i class="fas fa-lightbulb"></i>
+        <div class="insight-content">
+          <h4>Your Mood Insights</h4>
+          <p *ngIf="getTotal('last_7_days') > 0">
+            In the past week, you've been mostly 
+            <strong [style.color]="getMoodColor(moodStats!.last_7_days.Positive >= moodStats!.last_7_days.Negative ? 'Positive' : 'Negative')">
+              {{ moodStats!.last_7_days.Positive >= moodStats!.last_7_days.Negative ? 'positive' : 'negative' }}
+            </strong>
+            with {{ getTotal('last_7_days') }} mood entries recorded.
+          </p>
+          <p *ngIf="getTotal('last_7_days') === 0">
+            Start tracking your mood daily to see personalized insights here!
+          </p>
+        </div>
+      </div>
+      
+      <div class="user-info">
+        <p>Dashboard for: <strong>{{ userEmail }}</strong></p>
+        <p>Last updated: {{ now | date:'medium' }}</p>
+      </div>
+    </div>
+  </div>
+</div>

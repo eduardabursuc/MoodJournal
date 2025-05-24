@@ -349,3 +349,70 @@ async function sendEmailsToUsers(users, transporter, fromEmail) {
     total: users.length 
   };
 }
+
+functions.http('getMoodStatsBQ', async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+
+  const { user_id } = req.query;
+  if (!user_id) {
+    res.status(400).json({ error: 'Missing user_id in query' });
+    return;
+  }
+
+  const datasetId = 'text_sentiment_analysis';
+  const tableId = 'sentiment_entries';
+  const projectId = 'moodboardproject-455907';
+
+  const intervals = {
+    last_7_days: 7,
+    last_30_days: 30,
+    last_365_days: 365,
+  };
+
+  try {
+    const results = {};
+
+    for (const [label, days] of Object.entries(intervals)) {
+      const query = `
+        SELECT mood, COUNT(*) AS count
+        FROM \`${projectId}.${datasetId}.${tableId}\`
+        WHERE user_id = @userId
+          AND timestamp >= TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL @days DAY)
+        GROUP BY mood
+      `;
+
+      const options = {
+        query,
+        params: { userId: user_id, days },
+        location: 'us-central1',
+      };
+
+      const [job] = await bigquery.createQueryJob(options);
+      const [rows] = await job.getQueryResults();
+
+      // Initialize with 0 in case no results for a mood
+      const moodStats = { Positive: 0, Neutral: 0, Negative: 0 };
+
+      for (const row of rows) {
+        const mood = row.mood;
+        if (moodStats[mood] !== undefined) {
+          moodStats[mood] = Number(row.count);
+        }
+      }
+
+      results[label] = moodStats;
+    }
+
+    res.status(200).json(results);
+  } catch (err) {
+    console.error('Error fetching BigQuery stats:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
