@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule} from '@angular/common';
 import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   templateUrl: './mood-analytics.component.html',
   styleUrls: ['./mood-analytics.component.css'],
   standalone: true,
-  imports: [CommonModule, DatePipe]
+  imports: [CommonModule]
 })
 
 export class MoodAnalyticsComponent implements OnInit {

@@ -1,4 +1,5 @@
 <div class="container">
+  <!--
   <div class="journal-card">
     <h1>Welcome to Your Mood Journal</h1>
     <p class="subtitle">Track how you feel and discover patterns in your emotional well-being</p>
@@ -33,6 +34,92 @@
       <p>{{ errorMessage }}</p>
     </div>
   </div>
+-->
+
+  <div class="header-description">
+    <h1>Welcome to Your Mood Journal</h1>
+    <p class="subtitle">Track how you feel and discover patterns in your emotional well-being</p> 
+  </div>
+  
+  <div class="home-container">
+    <div class="calendar-container">
+      <div class="calendar-header">
+        <button class="arrow" (click)="previousMonth()">‹</button>
+        <span class="month-label">{{ currentMonth | date: 'MMMM y' }}</span>
+        <button class="arrow" (click)="nextMonth()">›</button>
+      </div>
+
+      <div class="calendar-grid">
+        <div class="day-label" *ngFor="let d of weekDays">{{ d }}</div>
+
+        <ng-container *ngFor="let day of calendarDays">
+          <div 
+            class="calendar-day" 
+            [ngClass]="getMoodClass(day.date)"
+            [class.today]="isToday(day.date)" 
+            [class.selected]="isSelectedDay(day)" 
+            (click)="selectDay(day)">
+            {{ day.date.getDate() || '' }}
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <div class="entry-container" *ngIf="entryPage">
+      <form (ngSubmit)="onSubmit()" class="journal-form" *ngIf="entryPage">
+        <div class="form-group">
+          <label for="entry">How are you feeling today?</label>
+          <textarea 
+            id="entry" 
+            [(ngModel)]="entry" 
+            name="entry" 
+            rows="4" 
+            placeholder="Write your thoughts here..."
+          ></textarea>
+        </div>
+        
+        <button type="submit" [disabled]="!entry" class="btn-primary">
+          <span class="btn-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </span>
+          Analyze Mood
+        </button>
+      </form>
+
+      <div *ngIf="mood" class="mood-result">
+        <h2>Your mood is: <span class="mood-text">{{ mood }}</span></h2>
+      </div>
+
+      <div *ngIf="errorMessage" class="error-message">
+        <p>{{ errorMessage }}</p>
+      </div>
+    </div>
+    
+    <div class="archive-container" *ngIf="!entryPage">
+      <div class="archive-header">
+        <h3>Previous Entries</h3>
+        <button class="add-btn" *ngIf="isToday(selectedDate)" (click)="entryPage = true">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+
+      <p *ngIf="entriesForSelectedDate.length == 0" class="no-entries">No entries.</p>
+      <ul class="entry-list">
+        <li *ngFor="let entry of entriesForSelectedDate">
+          <p>{{ entry.text }}</p>
+          <p class="time">{{ entry.date | date: 'HH:mm' }}</p>
+        </li>
+      </ul>
+      <div *ngIf="errorMessage" class="error-message">
+        <p>{{ errorMessage }}</p>
+      </div>
+    </div>  
+
+  </div>
+  
+
   
   <div class="features">
     <div class="feature-card">

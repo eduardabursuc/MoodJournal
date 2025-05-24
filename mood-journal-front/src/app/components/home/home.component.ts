@@ -17,6 +17,19 @@ export class HomeComponent implements OnInit {
   entry: string = '';
   mood: string = '';
   errorMessage = '';
+  entryPage = true;
+
+  currentMonth = new Date();
+  selectedDate: Date = new Date();
+  entries: { date: Date, text: string }[] = [
+    { date: new Date(), text: 'Feeling good today!' },
+    { date: new Date(), text: 'Had a rough day. Had a examen and then broke up with my bf, life is very sad lately.' },
+    { date: new Date(), text: 'Just okay.' },
+    { date: new Date(), text: 'Feeling great!' },
+    { date: new Date(), text: 'Not the best day.' }
+  ];
+  calendarDays: { date: Date }[] = [];
+  weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   constructor(
     private router: Router, 
@@ -30,7 +43,7 @@ export class HomeComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-    
+    this.generateCalendar();
     this.loading = false;
   }
 
@@ -72,4 +85,78 @@ export class HomeComponent implements OnInit {
       }
     }); 
   }
+
+  generateCalendar() {
+    const start = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth(), 1);
+    const end = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() + 1, 0);
+    const days: { date: Date }[] = [];
+
+    const offset = start.getDay();
+    for (let i = 0; i < offset; i++) {
+      days.push({ date: new Date(NaN) }); // Placeholder
+    }
+
+
+    for (let i = 1; i <= end.getDate(); i++) {
+      days.push({ date: new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth(), i) });
+    }
+
+    this.calendarDays = days;
+  }
+
+  previousMonth() {
+    this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() - 1, 1);
+    this.generateCalendar();
+  }
+
+  nextMonth() {
+    this.currentMonth = new Date(this.currentMonth.getFullYear(), this.currentMonth.getMonth() + 1, 1);
+    this.generateCalendar();
+  }
+
+  selectDay(day: { date: Date }) {
+    if (!isNaN(day.date.getTime())) {
+      this.entryPage = false;
+      this.selectedDate = day.date;
+    }
+  }
+
+  isSelectedDay(day: { date: Date }): boolean {
+    return this.selectedDate?.toDateString() === day.date.toDateString();
+  }
+
+  getEntriesForDay(date: Date) {
+    return this.entries.filter(e => new Date(e.date).toDateString() === date.toDateString()).map(e => e.text);
+  }
+
+  isToday(date: Date): boolean {
+    const today = new Date();
+    return date &&
+          date.getDate() === today.getDate() &&
+          date.getMonth() === today.getMonth() &&
+          date.getFullYear() === today.getFullYear();
+  }
+
+  getMoodClass(day: Date){
+    if (!day || isNaN(day.getTime()) || this.isToday(day)) {
+      return '';
+    }
+    if( day.getDate() % 2 === 0){
+      return 'happy';
+    } else if (day.getDate() % 3 === 0){
+      return 'neutral';
+    } else {
+      return 'sad';
+    }
+  }
+
+  get entriesForSelectedDate(): any[] {
+    return this.entries.filter(entry => {
+      const entryDate = new Date(entry.date);
+      return entryDate.getFullYear() === this.selectedDate.getFullYear()
+        && entryDate.getMonth() === this.selectedDate.getMonth()
+        && entryDate.getDate() === this.selectedDate.getDate();
+    });
+  }
+
 }
