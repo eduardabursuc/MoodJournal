@@ -89,7 +89,10 @@
       </form>
 
       <div *ngIf="mood" class="mood-result">
-        <h2>Your mood is: <span class="mood-text">{{ mood }}</span></h2>
+        <h2>Your mood is: <span class="mood-text" [ngClass]="getMoodBadgeClass(mood)">{{ mood }}</span></h2>
+        <div *ngIf="adviceForCurrentEntry" class="mood-advice" [ngClass]="getMoodAdviceClass(mood)">
+          <p>{{ adviceForCurrentEntry }}</p>
+        </div>
       </div>
 
       <div *ngIf="errorMessage" class="error-message">
@@ -105,21 +108,46 @@
         </button>
       </div>
 
-      <p *ngIf="entriesForSelectedDate.length == 0" class="no-entries">No entries.</p>
-      <ul class="entry-list">
-        <li *ngFor="let entry of entriesForSelectedDate">
-          <p>{{ entry.text }}</p>
-          <p class="time">{{ entry.date | date: 'HH:mm' }}</p>
+      <div *ngIf="selectedDayMood && selectedDayMood !== 'No entries' && selectedDayMood !== 'No valid scores'" class="overall-mood-display">
+        <p><strong>Overall mood: </strong> <span [ngClass]="getMoodBadgeClass(selectedDayMood)">{{ selectedDayMood }}</span></p>
+      </div>
+      <div *ngIf="!selectedDayMood || selectedDayMood === 'No entries' || selectedDayMood === 'No valid scores'" class="overall-mood-display">
+        <p><em>No overall mood recorded for this day.</em></p>
+      </div>
+
+      <div *ngIf="selectedDayAdvice && selectedDate && !isToday(selectedDate)"
+            class="mood-advice"
+            [ngClass]="getMoodAdviceClass(selectedDayMood)">
+        <p>{{ selectedDayAdvice }}</p>
+      </div>
+
+      <div *ngIf="selectedDate && isToday(selectedDate) && selectedDayMood && selectedDayMood !== 'No entries' && selectedDayMood !== 'No valid scores'" class="today-advice-notice">
+          <p><em>Overall advice for today will be available at the end of the day. Keep adding entries!</em></p>
+      </div>
+      
+      <hr *ngIf="entriesForSelectedDate.length > 0">
+
+      <p *ngIf="entriesForSelectedDate.length === 0" class="no-entries">
+        No specific journal entries for this day.
+      </p>
+
+      <ul class="entry-list" *ngIf="entriesForSelectedDate.length > 0">
+        <li *ngFor="let entryItem of entriesForSelectedDate">
+          <p class="entry-text-content">{{ entryItem.entry }}</p>
+          <div class="entry-details">
+            <span class="mood-badge" [ngClass]="getMoodBadgeClass(entryItem.mood)">{{ entryItem.mood }}</span>
+            <p *ngIf="entryItem.advice" class="entry-advice-text">{{ entryItem.advice }}</p>
+          </div>
+          <p class="time">{{ formatTimestamp(entryItem.timestamp) }}</p>
         </li>
       </ul>
-      <div *ngIf="errorMessage" class="error-message">
+      <div *ngIf="errorMessage && !entryPage" class="error-message">
         <p>{{ errorMessage }}</p>
       </div>
     </div>  
 
   </div>
   
-
   
   <div class="features">
     <div class="feature-card">
