@@ -349,7 +349,7 @@ async function sendEmailsToUsers(users, transporter, fromEmail) {
           <p>It's time to log your mood for today (${currentDate}).</p>
           <p>Tracking your moods regularly helps you gain insights into your emotional patterns and well-being.</p>
           <p style="margin: 30px 0;">
-            <a href="https://moodboardproject-455907.web.app/log" 
+            <a href="https://moodboardproject-455907.oa.r.appspot.com" 
                style="background-color: #5b6af0; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
               Log Today's Mood
             </a>
@@ -357,7 +357,7 @@ async function sendEmailsToUsers(users, transporter, fromEmail) {
           <p>Your Mood Journal Team</p>
           <hr style="border: 1px solid #eee; margin: 20px 0;">
           <p style="color: #777; font-size: 12px;">
-            If you don't want to receive these emails, <a href="https://moodboardproject-455907.web.app/profile">update your preferences</a>.
+            If you don't want to receive these emails, <a href="https://moodboardproject-455907.oa.r.appspot.com">update your preferences</a>.
           </p>
         </div>
       `;

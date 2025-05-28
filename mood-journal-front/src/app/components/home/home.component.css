@@ -164,7 +164,7 @@
   }
 
   .archive-container {
-    height: 440px;
+    height: 480px;
     padding: 0px 20px;
     justify-content: flex-start;
   }
@@ -176,7 +176,7 @@
     border-radius: 20px 0px 0px 20px;
     box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     padding: 20px;
-    height: 400px;
+    height: 440px;
   }
 
   .calendar-header {
@@ -200,7 +200,9 @@
   .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 6px;
+    gap: 10px;
+    margin: auto;
+    height: 80%;
   }
 
   .day-label {
