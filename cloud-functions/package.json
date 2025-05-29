@@ -11,8 +11,10 @@
     "@google-cloud/firestore": "^7.7.0",
     "@google-cloud/functions-framework": "^3.3.0",
     "@google-cloud/language": "^4.2.0",
-    "@google-cloud/translate": "^9.0.1",
     "@google-cloud/secret-manager": "^4.2.0",
+    "@google-cloud/translate": "^9.0.1",
+    "@google/genai": "^1.0.1",
+    "@google/generative-ai": "^0.24.1",
     "nodemailer": "^6.9.1"
   }
 }

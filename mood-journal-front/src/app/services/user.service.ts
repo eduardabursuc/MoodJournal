@@ -1,4 +1,3 @@
-// src/app/services/user.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
@@ -14,10 +13,8 @@ export class UserService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private readonly http: HttpClient) {
-    // Use your deployed Cloud Function URL
-    this.authApiUrl = 'https://us-central1-moodboardproject-455907.cloudfunctions.net/userAuth';
+    this.authApiUrl = 'https://us-central1-moodboardproject-455907.cloudfunctions.net';
     
-    // Load user data from storage on initialization
     this.loadUserFromStorage();
   }
 
@@ -34,7 +31,7 @@ export class UserService {
   }
 
   login(data: { email: string; password: string }): Observable<any> {
-    return this.http.post<any>(this.authApiUrl, {
+    return this.http.post<any>(`${this.authApiUrl}/userAuth`, {
       action: 'login',
       email: data.email,
       password: data.password
@@ -55,7 +52,7 @@ export class UserService {
   }
 
   register(data: { email: string; password: string }): Observable<any> {
-    return this.http.post<any>(this.authApiUrl, {
+    return this.http.post<any>(`${this.authApiUrl}/userAuth`, {
       action: 'register',
       email: data.email,
       password: data.password
@@ -105,5 +102,16 @@ export class UserService {
 
   getUsernameFromEmail(email: string): string {
     return email ? email.split('@')[0] : 'User';
+  }
+
+  getMoodStats(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.authApiUrl}/getMoodStatsBQ`, {
+      params: { user_id: userId }
+    }).pipe(
+      catchError(error => {
+        console.error('Error fetching mood stats:', error);
+        return of({ success: false, error: 'Failed to fetch mood stats' });
+      })
+    );
   }
 }
